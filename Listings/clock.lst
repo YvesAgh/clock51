@@ -1,0 +1,93 @@
+C51 COMPILER V9.60.0.0   CLOCK                                                             12/21/2020 23:33:29 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CLOCK
+OBJECT MODULE PLACED IN .\Objects\clock.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE clock.c OPTIMIZE(8,SPEED) BROWSE INCDIR(D:\Program F
+                    -iles (x86)\Keil_v5\C51\INC) DEBUG OBJECTEXTEND PRINT(.\Listings\clock.lst) TABS(2) OBJECT(.\Objects\clock.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "clock.h"
+   3          #include "show.h"
+   4          Clock clock;
+   5          void ClockInit(int hour,int min,int sec){
+   6   1        clock.hour=hour;
+   7   1        clock.min=min;
+   8   1        clock.sec=sec;
+   9   1      }
+  10          Clock* GetClock(){
+  11   1        return &clock;
+  12   1      }
+  13          
+  14          void ClockAdd(){
+  15   1        clock.sec++;
+  16   1      }
+  17          
+  18          void ClockUpdate(){
+  19   1        if(clock.sec>=60){
+  20   2          clock.sec=0;
+  21   2          clock.min++;
+  22   2        }
+  23   1        if(clock.min>=60){
+  24   2          clock.min=0;
+  25   2          clock.hour++;
+  26   2        }
+  27   1        if(clock.hour>=24){
+  28   2          clock.hour=0;
+  29   2        }
+  30   1      }
+  31          int IsIntegralPoint()
+  32          {
+  33   1        if(clock.min==0&&clock.sec==0)
+  34   1          return 1;
+  35   1        else return 0;
+  36   1      }
+  37          
+  38          typedef unsigned int u16;   //对数据类型进行声明定义
+  39          typedef unsigned char u8;
+  40          void Timer0Init()
+  41          {
+  42   1        TMOD|=0X01;//选择为定时器0模式，工作方式1，仅用TR0打开启动。
+  43   1      
+  44   1        TH0=0XFC; //给定时器赋初值，定时1ms
+  45   1        TL0=0X18; 
+  46   1        ET0=1;//打开定时器0中断允许
+  47   1        EA=1;//打开总中断
+  48   1        TR0=1;//打开定时器      
+  49   1      }
+  50          
+  51          void Timer0() interrupt 1
+  52          {
+  53   1        static u16 i;
+  54   1        TH0=0XFC; //给定时器赋初值，定时1ms
+C51 COMPILER V9.60.0.0   CLOCK                                                             12/21/2020 23:33:29 PAGE 2   
+
+  55   1        TL0=0X18;
+  56   1        i++;
+  57   1        if(i==1000)//1s执行一次
+  58   1        {
+  59   2          ClockAdd();
+  60   2          ClockUpdate();
+  61   2          ChangeIntoSegBuf(GetClock());
+  62   2          i=0;
+  63   2          //LedAction();
+  64   2        } 
+  65   1      }
+  66          
+  67          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    232    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

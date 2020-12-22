@@ -1,0 +1,1 @@
+"test.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(D:\Program Files (x86)\Keil_v5\C51\INC) DEBUG OBJECTEXTEND PRINT(.\Listings\test.lst) TABS (2) OBJECT(.\Objects\test.obj)

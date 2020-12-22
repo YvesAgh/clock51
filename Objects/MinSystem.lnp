@@ -1,0 +1,7 @@
+".\Objects\STARTUP.obj",
+".\Objects\test.obj",
+".\Objects\clock.obj",
+".\Objects\show.obj",
+".\Objects\timer.obj" 
+TO ".\Objects\MinSystem" 
+PRINT(".\Listings\MinSystem.m51") RAMSIZE(256) 
